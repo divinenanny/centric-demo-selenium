@@ -3,8 +3,7 @@ package sharedResources;
 import java.io.IOException;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.ITestResult;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -14,20 +13,15 @@ public class BaseTest {
 	
 	@BeforeMethod
 	public void setUpDriver() {
-		WebDriver driver = new FirefoxDriver();
+		System.setProperty("webdriver.gecko.driver","C:\\dev\\tools\\geckodriver\\geckodriver.exe");
+		System.setProperty("webdriver.chrome.driver","C:\\dev\\tools\\chromedriver\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
 		threadLocalDriver.set(driver);
 	}
 
 	@AfterMethod
-	public void closeDriver(ITestResult result) throws IOException {
+	public void closeDriver() throws IOException {
 		WebDriver driver = threadLocalDriver.get();
-		
-		if(ITestResult.FAILURE == result.getStatus())
-        {
-			sharedResources.CreateScreenShot.takescreenshot(driver, result.getName());
-			driver.quit();
-        }
-		
 		driver.quit();
 	}
 
